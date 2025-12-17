@@ -1,0 +1,2 @@
+# SmartKumbh
+Management (Software-only)
