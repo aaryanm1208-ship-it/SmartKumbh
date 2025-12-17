@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartKumbh — AI-driven Software Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- React and ReactDOM (CDN) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Chart.js for Dashboard -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f9fafc;
+      color: #222;
+    }
+    header {
+      background: #003366;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ffcc00;
+    }
+    main {
+      padding: 2rem;
+      max-width: 1100px;
+      margin: auto;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .hero h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    @media(min-width:768px){
+      .grid-2 {grid-template-columns: repeat(2,1fr);}
+      .grid-3 {grid-template-columns: repeat(3,1fr);}
+      .grid-4 {grid-template-columns: repeat(4,1fr);}
+    }
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #003366;
+    }
+    .contact-form {
+      display: grid;
+      gap: 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    .contact-form input, .contact-form textarea {
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .contact-form button {
+      background: #003366;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .contact-form button:hover {
+      background: #0055aa;
+    }
+    footer {
+      background: #003366;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function Navbar({ setPage, page }) {
+      const pages = ["Home", "Problem Statement", "Features", "Dashboard", "Contact Us"];
+      return (
+        <header>
+          <h1>SmartKumbh</h1>
+          <nav>
+            {pages.map(p => (
+              <a key={p} href="#" onClick={() => setPage(p)} style={{borderBottom: page===p?"2px solid #ffcc00":"none"}}>
+                {p}
+              </a>
+            ))}
+          </nav>
+        </header>
+      );
+    }
+
+    function Home() {
+      return (
+        <main>
+          <div className="hero">
+            <h2>SmartKumbh — AI-driven Software Platform</h2>
+            <p>Real-time Crowd, Safety & Resource Management for Kumbh Mela</p>
+          </div>
+        </main>
+      );
+    }
+
+    function Problem() {
+      return (
+        <main>
+          <h2>Problem Statement</h2>
+          <p>
+            Kumbh Mela sees extremely high and dynamic crowd densities creating risks: 
+            stampedes, lost persons, delayed emergency response, and inefficient resource distribution. 
+            Government agencies have fragmented information leading to delayed decision-making and safety hazards.
+          </p>
+        </main>
+      );
+    }
+
+    function Features() {
+      const feats = [
+        {title:"Crowd Monitoring", desc:"AI-based real-time density analysis."},
+        {title:"Lost Person Tracking", desc:"Facial recognition & data integration."},
+        {title:"Emergency Response", desc:"Optimized routing & resource allocation."},
+        {title:"Resource Management", desc:"Dynamic allocation of facilities."},
+      ];
+      return (
+        <main>
+          <h2>Features</h2>
+          <div className="grid grid-2">
+            {feats.map(f=>(
+              <div key={f.title} className="card">
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </main>
+      );
+    }
+
+    function Dashboard() {
+      useEffect(()=>{
+        const ctx = document.getElementById("chart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["Zone A","Zone B","Zone C","Zone D"],
+            datasets: [{
+              label: "Crowd Density (in thousands)",
+              data: [12,19,7,14],
+              backgroundColor: ["#003366","#0055aa","#0077cc","#3399ff"]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {legend: {position:"top"}}
+          }
+        });
+      },[]);
+      return (
+        <main>
+          <h2>Live Dashboard (Demo)</h2>
+          <canvas id="chart" height="100"></canvas>
+        </main>
+      );
+    }
+
+    function Contact() {
+      return (
+        <main>
+          <h2>Contact Us</h2>
+          <form className="contact-form" onSubmit={(e)=>{e.preventDefault(); alert("Form submitted!");}}>
+            <input type="text" placeholder="Your Name" required />
+            <input type="email" placeholder="Your Email" required />
+            <textarea placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        </main>
+      );
+    }
+
+    function App() {
+      const [page, setPage] = useState("Home");
+      return (
+        <>
+          <Navbar setPage={setPage} page={page}/>
+          {page==="Home" && <Home/>}
+          {page==="Problem Statement" && <Problem/>}
+          {page==="Features" && <Features/>}
+          {page==="Dashboard" && <Dashboard/>}
+          {page==="Contact Us" && <Contact/>}
+          <footer>
+            &copy; 2025 SmartKumbh Project | Govt. Grade Prototype
+          </footer>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>
